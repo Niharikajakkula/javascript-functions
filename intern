@@ -1,0 +1,38 @@
+function solution(D) {
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weekSums = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
+  const dayCount = { 'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0 };
+  for (let dateStr in D) {
+    const date = new Date(dateStr);
+    const day = dayNames[date.getDay()];
+    weekSums[day] += D[dateStr];
+    dayCount[day] += 1;
+  }
+  for (let day in weekSums) {
+    if (dayCount[day] > 0) {
+      weekSums[day] = weekSums[day] / dayCount[day];
+    } else {
+      weekSums[day] = null;
+    }
+}
+  for (let i = 0; i < weekDays.length; i++) {
+    if (weekSums[weekDays[i]] === null) {
+      let prev = (i - 1 + 7) % 7;
+      let next = (i + 1) % 7;
+      while (weekSums[weekDays[prev]] === null) {
+        prev = (prev - 1 + 7) % 7;
+      }
+      while (weekSums[weekDays[next]] === null) {
+        next = (next + 1) % 7;
+      }
+
+      weekSums[weekDays[i]] = (weekSums[weekDays[prev]] + weekSums[weekDays[next]]) / 2;
+    }
+  }
+  for (let k in weekSums) {
+    weekSums[k] = Math.round(weekSums[k]);
+  }
+
+  return weekSums;
+}
